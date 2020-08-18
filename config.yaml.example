@@ -1,0 +1,25 @@
+collection:
+  feeds:
+    - "https://meduza.io/rss/all"
+    - "http://static.feed.rbc.ru/rbc/logical/footer/news.rss"
+  words:
+    - "авиация"
+    - "коронавирус"
+  threads: 5
+  timeout: 1
+
+grpc:
+  host: "127.0.0.1"
+  port: 9000
+
+db:
+  host: "127.0.0.1"
+  port: 27017
+  database: "s7rss"
+  username: ""
+  password: ""
+
+log:
+  output: "STDOUT"
+  level: "DEBUG"
+  format: "CLI"

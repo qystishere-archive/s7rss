@@ -1,0 +1,36 @@
+version: '3.7'
+
+services:
+  s7rss:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: s7rss
+    environment:
+      - S7RSS_COLLECTION_FEEDS=https://meduza.io/rss/all,http://static.feed.rbc.ru/rbc/logical/footer/news.rss
+      - S7RSS_COLLECTION_WORDS=коронавирус,авиация
+      - S7RSS_LOGGING_LEVEL=INFO
+      - S7RSS_LOGGING_FORMAT=TEXT
+      - S7RSS_DB_HOST=s7rss_mongodb
+    ports:
+      - 9000:9000
+    networks:
+      - s7
+    tty: true
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo
+    container_name: s7rss_mongodb
+    expose:
+      - 27017
+    networks:
+      - s7
+    volumes:
+      - 'mongo:/data/db'
+
+networks:
+  s7:
+volumes:
+  mongo:
