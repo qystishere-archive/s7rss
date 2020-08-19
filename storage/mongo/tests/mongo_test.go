@@ -26,10 +26,7 @@ func TestMain(m *testing.M) {
 			panic(err)
 		}
 
-		newsStorage, err = mongo.NewNewsStorage(client)
-		if err != nil {
-			panic(err)
-		}
+		newsStorage = mongo.NewNewsStorage(client)
 	}); err != nil {
 		panic(err)
 	}

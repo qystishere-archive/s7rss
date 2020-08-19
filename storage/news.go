@@ -1,7 +1,8 @@
 package storage
 
 type NewsStorager interface {
-	Store(input StoreNews) (*News, error)
+	Batch(input BatchNews) error
+	Store(input StoreNews) error
 	Get(input GetNews) ([]*News, error)
 }
 
@@ -11,6 +12,10 @@ type News struct {
 	Title       string `json:"title" bson:"title"`
 	Link        string `json:"link" bson:"link"`
 	Description string `json:"description" bson:"description"`
+}
+
+type BatchNews struct {
+	News []*News
 }
 
 type StoreNews struct {

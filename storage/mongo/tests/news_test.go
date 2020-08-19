@@ -36,7 +36,7 @@ func (s *NewsSuite) Test1Store() {
 	}}
 
 	for _, article := range s.news {
-		_, err := newsStorage.Store(storage.StoreNews{
+		err := newsStorage.Store(storage.StoreNews{
 			News: article,
 		})
 		s.NoError(err)

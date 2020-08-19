@@ -26,13 +26,21 @@ var (
 		PreRunE: func(cmd *cobra.Command, args []string) error {
 			var skippedFlags []string
 			for _, requiredFlag := range requiredFlags {
-				if len(viper.GetStringSlice(requiredFlag)) == 0 {
+				ss := viper.GetStringSlice(requiredFlag)
+				// Viper doesn't support slice values from env: https://github.com/spf13/viper/pull/946/files
+				// so we do:
+				if len(ss) == 1 && strings.Contains(ss[0], ",") {
+					values := strings.Split(ss[0], ",")
+					viper.Set(requiredFlag, values)
+				}
+				if len(ss) == 0 {
 					skippedFlags = append(skippedFlags, requiredFlag)
 				}
 			}
 			if len(skippedFlags) > 0 {
 				return fmt.Errorf("required flags \"%s\" has not been set", strings.Join(skippedFlags, ", "))
 			}
+			initLogging()
 			return nil
 		},
 	}
@@ -53,15 +61,15 @@ func init() {
 	})
 	pf := rootCmd.PersistentFlags()
 
-	pf.StringVarP(&cfgFile, "config", "c", "../../../config.yaml", "Config file path")
+	pf.StringVarP(&cfgFile, "config", "c", "", "Config file path")
 
 	pf.StringSlice("collection.feeds", []string{}, "List of rss feeds")
 	pf.StringSlice("collection.words", []string{}, "Search words in news headlines and announcements")
 	pf.Int("collection.threads", 5, "Number of collection threads")
 	pf.Int("collection.timeout", 1, "Delay between collection")
 
-	pf.String("grpc.host", "", "GRPC listen host")
-	pf.Int("grpc.port", 9000, "GRPC listen port")
+	pf.String("grpc.host", "", "GRPC service listen host")
+	pf.Int("grpc.port", 9000, "GRPC service listen port")
 
 	pf.String("db.host", "127.0.0.1", "Database host")
 	pf.Int("db.port", 27017, "Database port")
@@ -77,7 +85,9 @@ func init() {
 		log.WithError(err).
 			Fatal("Bind flags")
 	}
+}
 
+func initLogging() {
 	var file *os.File
 	if viper.GetString("log.output") != "STDOUT" {
 		var err error

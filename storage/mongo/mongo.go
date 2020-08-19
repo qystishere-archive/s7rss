@@ -12,12 +12,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-const (
-	bsonTagName = "bson"
-
-	readTimeout  = time.Second * 1
-	writeTimeout = time.Second * 2
-)
+const bsonTagName = "bson"
 
 type Config struct {
 	Host     string

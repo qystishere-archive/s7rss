@@ -9,8 +9,8 @@ services:
     environment:
       - S7RSS_COLLECTION_FEEDS=https://meduza.io/rss/all,http://static.feed.rbc.ru/rbc/logical/footer/news.rss
       - S7RSS_COLLECTION_WORDS=коронавирус,авиация
-      - S7RSS_LOGGING_LEVEL=INFO
-      - S7RSS_LOGGING_FORMAT=TEXT
+      - S7RSS_LOG_LEVEL=INFO
+      - S7RSS_LOG_FORMAT=TEXT
       - S7RSS_DB_HOST=s7rss_mongodb
     networks:
       - s7

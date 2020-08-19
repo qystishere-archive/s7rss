@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package provider;
+
+service Provider {
+  rpc GetNews(GetNewsRequest) returns (GetNewsResponse) {}
+}
+
+message GetNewsRequest {
+  repeated string id = 1;
+  repeated string channel = 2;
+  repeated string link = 3;
+}
+
+message GetNewsResponse {
+  repeated News news = 1;
+
+  message News {
+    string id = 1;
+    string channel = 2;
+    string title = 3;
+    string link = 4;
+    string description = 5;
+  }
+}
